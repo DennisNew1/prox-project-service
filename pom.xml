@@ -10,7 +10,7 @@
 
   <groupId>io.archi-lab.prox</groupId>
   <artifactId>prox-project-service</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>${revision}-${changelist}</version>
 
   <name>prox-project-service</name>
   <description>Prox Project Service</description>
@@ -22,6 +22,8 @@
     <java.version>1.8</java.version>
     <keycloak.version>6.0.1</keycloak.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <revision>0.1.0</revision>
+    <changelist>SNAPSHOT</changelist>
     <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
     <tidy-maven.version>1.1.0</tidy-maven.version>
   </properties>
@@ -125,6 +127,18 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>tidy-maven-plugin</artifactId>
         <version>${tidy-maven.version}</version>
@@ -143,7 +157,6 @@
         <version>${formatter-maven.version}</version>
         <configuration>
           <configFile>${project.basedir}/eclipse-java-google-style.xml</configFile>
-          <lineEnding>LF</lineEnding>
         </configuration>
         <executions>
           <execution>
@@ -183,13 +196,33 @@
         <artifactId>dockerfile-maven-plugin</artifactId>
         <version>${dockerfile-maven.version}</version>
         <configuration>
+          <contextDirectory>${project.basedir}</contextDirectory>
           <repository>${docker.image.prefix}/${project.artifactId}</repository>
         </configuration>
         <executions>
           <execution>
+            <id>docker-build</id>
             <goals>
               <goal>build</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>docker-tag</id>
+            <goals>
+              <goal>tag</goal>
+            </goals>
+            <configuration>
+              <tag>${project.version}</tag>
+            </configuration>
+          </execution>
+          <execution>
+            <id>docker-push</id>
+            <goals>
+              <goal>push</goal>
+            </goals>
+            <configuration>
+              <tag>${project.version}</tag>
+            </configuration>
           </execution>
         </executions>
       </plugin>
