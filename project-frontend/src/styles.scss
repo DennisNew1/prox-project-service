@@ -1,0 +1,20 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.mat-drawer-container {
+  min-width: 350px;
+  background-color: #fcfcfc;
+}
+
+:root {
+  --th-red: #c60c0f;
+  --th-orange: #ea5b0c;
+  --th-purple: #b62584;
+}
+
+a {
+  color: var(--th-red);
+}
+
+.mat-card-header-text {
+  width: 100%;
+}
